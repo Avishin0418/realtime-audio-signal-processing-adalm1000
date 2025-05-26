@@ -1,0 +1,24 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import sounddevice as sd
+
+duration = 5  # seconds
+fs = 44100  # sample rate
+
+print("Recording...")
+audio = sd.rec(int(duration * fs), samplerate=fs, channels=1)
+sd.wait()
+audio = audio.flatten()
+
+# Perform FFT
+N = len(audio)
+f = np.fft.fftfreq(N, 1/fs)
+fft_vals = np.abs(np.fft.fft(audio))
+
+# Plot FFT
+plt.figure(figsize=(10, 4))
+plt.plot(f[:N // 2], fft_vals[:N // 2])
+plt.title("Frequency Spectrum")
+plt.xlabel("Frequency [Hz]")
+plt.ylabel("Amplitude")
+plt.show()
